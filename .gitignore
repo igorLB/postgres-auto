@@ -1,0 +1,4 @@
+.env
+
+# Ignore database data directory (optional - remove if you want to keep local db data in git)
+db/data/

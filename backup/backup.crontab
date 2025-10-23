@@ -1,0 +1,7 @@
+# Example crontab line to run the backup container daily at 02:30 AM
+# Adjust the docker command path and compose project directory as needed.
+# This will run the backup container once and remove it after completion.
+30 2 * * * cd /home/user/postgres-auto && /usr/bin/docker compose run --rm backup once >> /var/log/postgres-backup.log 2>&1
+
+# If you want to keep logs per-run use something like:
+# 30 2 * * * cd /home/user/postgres-auto && /usr/bin/docker compose run --rm backup once > db/backups/cron-$(date +\\%Y\\%m\\%d_\\%H\\%M\\%S).log 2>&1

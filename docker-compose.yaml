@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres-auto
+    restart: unless-stopped
+    environment:
+      TZ: America/Sao_Paulo
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+    env_file:
+      - .env
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      # Use the actual postgres user configured above
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-gps} -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backup:
+    build:
+      context: ./backup
+      dockerfile: Dockerfile
+    image: pg-backup:local
+    container_name: pg-backup
+    restart: "no"
+    depends_on:
+      - postgres
+    volumes:
+      - ./db/backups:/backups
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGUSER: ${POSTGRES_USER:-gps}
+      PGHOST: postgres
+      BACKUP_RETAIN: ${BACKUP_RETAIN:-7}
+    entrypoint: ["/usr/local/bin/entrypoint.sh"]
+
+networks:
+  default:
+    name: ${NETWORK_NAME:-mynetwork}
+    external: true

@@ -1,0 +1,1 @@
+cat db/backups/backup_20251021_030000.sql | docker exec -i postgres-auto psql -U gps
