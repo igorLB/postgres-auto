@@ -1,5 +1,8 @@
-Postgres Auto backup
+# Postgres Auto backup
 
+A small and simple project to easily launch a postgres 17 container on a VPS with easy backup and restore.
+
+### Setup
 
 1) Create the external Docker network if it doesn't exist
 
@@ -29,8 +32,11 @@ crontab backup/backup.crontab
 ```
 
 
-## Why POSTGRES_PASSWORD and APP_DB_PASSWORD?
-POSTGRES_PASSWORD
+### Why POSTGRES_PASSWORD and APP_DB_PASSWORD?
+**POSTGRES_PASSWORD**
+
 Used by the official Postgres image to set the initial superuser password (the user named by POSTGRES_USER, default postgres). It's what the image uses during non-interactive initial cluster setup so the container has an admin account.
-APP_DB_PASSWORD
+
+**APP_DB_PASSWORD**
+
 Used by your init script to create the application database user (the gps user in your repo). It is the password given to the app user the repo creates (so the app can connect to its DB).
